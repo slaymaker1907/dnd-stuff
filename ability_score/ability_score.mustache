@@ -5,19 +5,66 @@
 <title>Ability score chooser</title>
 </head>
 
+<link href="{{bootstrap}}" rel="stylesheet">
+
 <body>
 
-<div class="main-form">
+<div class="container">
+  <div class="page-header">
+      <h1>Dungeons and Dragons 5e Attribute Calculator</h1>
+  </div>
   <form oninput="recalculateAll();">
     {{#attributes}}
-    <div class="form-row">
-      <p>{{name}}: <input id="{{name}}" type="number" min="8" max="15" value="8"> + <input id="{{name}}_mod" type="number" min="0" max="12" value="0"> = <span id="{{name}}_sum"></span></p>
+    <div class="row form-group">
+      <div class="col-xs-2">
+        <label for="{{name}}">{{name}}: </label>
+      </div>
+      <div class="col-xs-10">
+        <div class="row">
+          <div class="col-xs-4">
+            <input id="{{name}}" class="form-control" type="number" min="8" max="15" value="8">
+          </div>
+          <div class="col-xs-1">
+            <p>+</p>
+          </div>
+          <div class="col-xs-4">
+            <input id="{{name}}_mod" type="number" min="0" max="12" value="0" class="form-control">
+          </div>
+          <div class="col-xs-1">
+            <p>=</p>
+          </div>
+          <div class="col-xs-2">
+            <p><span id="{{name}}_sum"></span>
+          </div>
+        </div>
+      </div>
     </div>
     {{/attributes}}
-    <div class="form-row">
-      <p class="result">Cost: <span id="final-result">0</span></p>
+
+    <div class="row">
+      <div class="col-xs-10 col-xs-offset-2">
+        <div class="row">
+          <div class="col-xs-1 col-xs-offset-9">
+            <p><strong>Cost:</strong></p>
+          </div>
+          <div class="col-xs-2">
+            <p><span id="final-result">0</span></p>
+          </div>
+        </div>
+      </div>
     </div>
   </form>
+
+  <div class="row">
+    <div class="xs-col-12">
+      <hr />
+    </div>
+  </div>
+  <div class="row">
+    <div class="xs-col-12">
+      <p>Contribute or analyze source at <a href="https://github.com/slaymaker1907/dnd-stuff">GitHub</a>. Source is released through the <a href="https://github.com/slaymaker1907/dnd-stuff/blob/master/LICENSE">MIT</a> license.</p>
+    </div>
+  </div>
 </div>
 
 </body>
@@ -87,47 +134,5 @@ var computeSum = function() {
 
 $(document).ready(recalculateAll);
 </script>
-
-<style>
-p {
-  font: normal 15px/100% Verdana, Tahoma, sans-serif;
-  color: #552100;
-}
-input, button {
-  border: solid 1px #E5E5E5;
-  padding: 5px;
-  font: normal 15px/100% Verdana, Tahoma, sans-serif;
-  width: 50;
-  background-color: #D4946A;
-  box-sizing: border-box;
-  color: #552100;
-}
-button {
-  outline: 0;
-  background-color: #791422;
-  color: #FFE0AA;
-}
-html {
-  background-color: white;
-}
-.main-form {
-  width: 350px;
-  margin: 0 auto;
-  border-width: 1px;
-  border-color: #D4946A;
-  border-style: solid;
-  padding: 10px;
-  background-color: #FFCBAA;
-}
-.form-row {
-  margin: 0 auto;
-  overflow: hidden;
-}
-.result {
-  float: right;
-  overflow: hidden;
-  font-size: 18px;
-}
-</style>
 
 </html>
