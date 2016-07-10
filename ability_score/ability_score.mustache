@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ability score chooser</title>
+</head>
+
+<body>
+
+<div class="main-form">
+  <form oninput="recalculateAll();">
+    {{#attributes}}
+    <div class="form-row">
+      <p>{{name}}: <input id="{{name}}" type="number" min="8" max="15" value="8"> + <input id="{{name}}_mod" type="number" min="0" max="12" value="0"> = <span id="{{name}}_sum"></span></p>
+    </div>
+    {{/attributes}}
+    <div class="form-row">
+      <p class="result">Cost: <span id="final-result">0</span></p>
+    </div>
+  </form>
+</div>
+
+</body>
+
+<script src="{{jquery}}"></script>
+<script>
+var getAttrCost = function(attrs) {
+  var sum = 0;
+  for(var i in attrs) {
+    var current = attrs[i];
+    if (current < 14)
+      sum += current - 8;
+    else if (current == 14)
+      sum += 7;
+    else
+      sum += 9
+    }
+
+    return sum;
+  };
+
+var extractAttrs = function(id) {
+  var element = $('#' + id);
+  if (element === null){
+    console.log('Could not find element with id=' + id);
+  }
+  return parseInt(element.val());
+}
+
+var mapFunc = function(func, arr) {
+  var result = [];
+  for (var i in arr) {
+    result.push(func(arr[i]));
+  }
+
+  return result;
+}
+
+var attributes = [{{#attributes}}'{{name}}'{{^last}}, {{/last}}{{/attributes}}]
+var getCurrentAttrs = function() {
+  return mapFunc(extractAttrs, attributes);
+}
+
+var recalculateAll = function() {
+  var attrs = getCurrentAttrs();
+  var sum = getAttrCost(attrs);
+  var result = $('#final-result');
+  result.text(sum);
+  computeSum();
+}
+
+var computeSum = function() {
+  var recomputeAttr = function(attr) {
+    var base = extractAttrs(attr);
+    var mod = extractAttrs(attr + '_mod');
+    var sum = base + mod;
+    var elementId = '#' + attr + '_sum';
+    var element = $(elementId);
+    if (element === null){
+      console.log('Could not find element with id=' + elementId);
+    }
+    $('#' + attr + '_sum').text(sum);
+    return sum;
+  }
+  mapFunc(recomputeAttr, attributes);
+}
+
+$(document).ready(recalculateAll);
+</script>
+
+<style>
+p {
+  font: normal 15px/100% Verdana, Tahoma, sans-serif;
+  color: #552100;
+}
+input, button {
+  border: solid 1px #E5E5E5;
+  padding: 5px;
+  font: normal 15px/100% Verdana, Tahoma, sans-serif;
+  width: 50;
+  background-color: #D4946A;
+  box-sizing: border-box;
+  color: #552100;
+}
+button {
+  outline: 0;
+  background-color: #791422;
+  color: #FFE0AA;
+}
+html {
+  background-color: white;
+}
+.main-form {
+  width: 350px;
+  margin: 0 auto;
+  border-width: 1px;
+  border-color: #D4946A;
+  border-style: solid;
+  padding: 10px;
+  background-color: #FFCBAA;
+}
+.form-row {
+  margin: 0 auto;
+  overflow: hidden;
+}
+.result {
+  float: right;
+  overflow: hidden;
+  font-size: 18px;
+}
+</style>
+
+</html>
